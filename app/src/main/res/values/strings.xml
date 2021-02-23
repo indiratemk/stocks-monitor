@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">StocksMonitor</string>
+    <string name="hint_search_input">Find company or ticker</string>
+    <string name="label_stocks">Stocks</string>
+    <string name="label_favourite">Favourite</string>
 </resources>
