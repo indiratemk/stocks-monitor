@@ -59,4 +59,10 @@
                 android:text="@string/label_favourite" />
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.example.stocksmonitor.utils.NotScrollableViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
