@@ -1,9 +1,10 @@
-package com.example.stocksmonitor.ui
+package com.example.stocksmonitor.ui.stocks
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.repository.StocksRepository
+import com.example.stocksmonitor.ui.BaseViewModel
 import com.example.stocksmonitor.utils.Resource
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ class StocksViewModel(
         coroutineContext.launch {
             _stocks.value = Resource.Loading(true)
             _stocks.value = stocksRepository.getStocks()
+            _stocks.value = Resource.Loading(false)
         }
     }
 

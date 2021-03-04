@@ -7,4 +7,5 @@ object Constants {
     const val TICKERS = "AAPL,MSFT,AMZN,FB,JPM,BRK.B,JNJ,GOOG,GOOGL,XOM,BAC,WFC,INTC,T,V,CSCO,CVX," +
             "UNH,PFE,HD,PG,VZ,C,ABBV,BA,KO,CMCSA,MA,PM,DWDP,PEP,ORCL,DIS,MRK,NVDA,MMM,AMGN," +
             "IBM,NFLX,WMT,MO,MCD,GE,HON,MDT"
+    const val IMAGES_URL = "https://finnhub.io/api/logo?symbol="
 }
