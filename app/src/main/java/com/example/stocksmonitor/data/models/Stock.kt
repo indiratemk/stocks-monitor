@@ -19,5 +19,13 @@ data class Stock(
 
     @SerializedName("currency")
     @Expose
-    val currency: String? = null
+    val currency: String? = null,
+
+    @SerializedName("regularMarketChange")
+    @Expose
+    val marketChange: Float = 0f,
+
+    @SerializedName("regularMarketChangePercent")
+    @Expose
+    val marketChangePercent: Float = 0f
 )

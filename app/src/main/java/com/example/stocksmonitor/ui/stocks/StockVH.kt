@@ -2,14 +2,14 @@ package com.example.stocksmonitor.ui.stocks
 
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.stocksmonitor.R
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.databinding.StockItemBinding
-import com.example.stocksmonitor.ui.Currency
 import com.example.stocksmonitor.utils.Constants
+import java.text.NumberFormat
+import java.util.*
 
 
 class StockVH(
@@ -26,15 +26,32 @@ class StockVH(
             )
             tvTicker.text = stock.symbol
             tvCompanyName.text = stock.longName
-            tvCurrentPrice.text = when (stock.currency) {
-                Currency.RUB.value -> "₽${stock.regularPrice}"
-                Currency.EUR.value -> "€${stock.regularPrice}"
-                else -> "\$${stock.regularPrice}"
+
+            val currencyFormatter = when (stock.currency) {
+                "USD" -> NumberFormat.getCurrencyInstance(Locale.US).apply {
+                    currency = Currency.getInstance(stock.currency)
+                    maximumFractionDigits = 2
+                }
+                else -> NumberFormat.getCurrencyInstance().apply {
+                    currency = Currency.getInstance(stock.currency)
+                    maximumFractionDigits = 2
+                }
             }
-            val circularProgressDrawable = CircularProgressDrawable(itemView.context)
-            circularProgressDrawable.strokeWidth = 5f
-            circularProgressDrawable.centerRadius = 30f
-            circularProgressDrawable.start()
+            tvCurrentPrice.text = currencyFormatter.format(stock.regularPrice)
+            tvDayDelta.setTextColor(
+                if (stock.marketChange < 0 || stock.marketChangePercent < 0)
+                    ContextCompat.getColor(itemView.context, R.color.red)
+                else
+                    ContextCompat.getColor(itemView.context, R.color.green)
+            )
+            val formattedPercent = String.format("%.2f", stock.marketChangePercent)
+            tvDayDelta.text = itemView.context.getString(R.string.label_day_delta,
+                if (stock.marketChange > 0)
+                    "+${currencyFormatter.format(stock.marketChange)}"
+                else
+                    currencyFormatter.format(stock.marketChange), formattedPercent)
+
+
             Glide.with(itemView.context)
                 .load(Constants.IMAGES_URL + stock.symbol)
                 .transform(RoundedCorners(itemView.context.resources.getDimensionPixelSize(R.dimen.logo_border_radius)))

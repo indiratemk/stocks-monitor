@@ -4,4 +4,5 @@
     <string name="label_stocks">Stocks</string>
     <string name="label_favourite">Favourite</string>
     <string name="desc_favourite">Add to/remove from favourite</string>
+    <string name="label_day_delta">%1$s (%2$s%%)</string>
 </resources>
