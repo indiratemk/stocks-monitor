@@ -6,4 +6,10 @@ import com.example.stocksmonitor.utils.Resource
 interface StocksRepository {
 
     suspend fun getStocks(): Resource<List<Stock>>
+
+    suspend fun getFavouriteStocks(): Resource<List<Stock>>
+
+    suspend fun addFavouriteStock(stock: Stock)
+
+    suspend fun removeFavouriteStock(stock: Stock)
 }

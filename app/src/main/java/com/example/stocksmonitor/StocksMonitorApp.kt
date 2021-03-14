@@ -1,6 +1,7 @@
 package com.example.stocksmonitor
 
 import android.app.Application
+import com.example.stocksmonitor.di.dbModule
 import com.example.stocksmonitor.di.networkModule
 import com.example.stocksmonitor.di.repositoryModule
 import com.example.stocksmonitor.di.viewModelModule
@@ -13,7 +14,8 @@ class StocksMonitorApp : Application() {
         super.onCreate()
 
         startKoin {
-            modules(listOf(networkModule, repositoryModule, viewModelModule))
+            androidContext(applicationContext)
+            modules(listOf(dbModule, networkModule, repositoryModule, viewModelModule))
         }
     }
 }
