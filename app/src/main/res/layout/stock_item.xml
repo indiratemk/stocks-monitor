@@ -50,8 +50,8 @@
             app:layout_constraintTop_toBottomOf="@id/tvTicker"
             tools:text="Yandex, LLC" />
 
-        <ImageButton
-            android:id="@+id/ibFavourite"
+        <CheckBox
+            android:id="@+id/chbFavourite"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginStart="8dp"
@@ -59,7 +59,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tvTicker"
             app:layout_constraintStart_toEndOf="@id/tvTicker"
             app:layout_constraintTop_toTopOf="@id/tvTicker"
-            app:srcCompat="@drawable/ic_favourite" />
+            android:button="@drawable/favourite_chb" />
 
         <TextView
             android:id="@+id/tvCurrentPrice"
@@ -80,9 +80,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:textColor="@color/green"
-            app:layout_constraintBottom_toBottomOf="@+id/ivLogo"
+            app:layout_constraintBottom_toBottomOf="@id/ivLogo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvCurrentPrice"
             tools:text="+$ 0.12 (1,15%)" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
