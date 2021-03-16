@@ -8,31 +8,41 @@ import com.example.stocksmonitor.databinding.StockItemBinding
 
 class StocksAdapter : RecyclerView.Adapter<StockVH>() {
 
-    companion object {
-        const val DARK_TYPE = 0
-        const val WHITE_TYPE = 1
-    }
-
-    var stocks = listOf<Stock>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    private var stocks = ArrayList<Stock>()
+    var listener: StockClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockVH {
         val inflater = LayoutInflater.from(parent.context)
         return StockVH(StockItemBinding.inflate(inflater, parent, false))
     }
 
-//    override fun getItemViewType(position: Int): Int {
-//        if (position % 2 == 0)
-//            return DARK_TYPE
-//        return WHITE_TYPE
-//    }
-
     override fun onBindViewHolder(holder: StockVH, position: Int) {
-        holder.bind(stocks[position])
+        holder.bind(stocks[position], listener)
     }
 
     override fun getItemCount() = stocks.count()
+
+    fun setStocks(stocks: List<Stock>) {
+        this.stocks.clear()
+        this.stocks.addAll(stocks)
+        notifyDataSetChanged()
+    }
+
+    fun removeStock(stock: Stock) {
+        val position = stocks.indexOfFirst { it.symbol == stock.symbol }
+        this.stocks.removeAt(position)
+        notifyDataSetChanged()
+    }
+
+    fun addStock(stock: Stock) {
+        this.stocks.add(stock)
+        val position = this.stocks.indexOf(stock)
+        notifyItemInserted(position)
+    }
+
+    fun updateStock(stock: Stock) {
+        val position = stocks.indexOfFirst { it.symbol == stock.symbol }
+        this.stocks[position] = stock
+        notifyItemChanged(position)
+    }
 }

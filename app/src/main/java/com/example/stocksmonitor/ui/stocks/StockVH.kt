@@ -33,6 +33,11 @@ class StockVH(
             tvTicker.text = stock.symbol
             tvCompanyName.text = stock.longName
             handlePrice(stock)
+            chbFavourite.isChecked = stock.isFavourite
+            chbFavourite.setOnClickListener {
+                stock.isFavourite = !stock.isFavourite
+                listener?.onFavouriteClick(stock)
+            }
         }
     }
 
@@ -57,7 +62,8 @@ class StockVH(
             stock.marketChange?.let { marketChange ->
                 val formattedPercent = String.format("%.2f", stock.marketChangePercent)
                 val formattedMarketChange = if (marketChange > 0)
-                    "+" + currencyFormatter.format(stock.marketChange)
+                    itemView.context.getString(R.string.label_positive_market_change,
+                            currencyFormatter.format(stock.marketChange))
                 else
                     currencyFormatter.format(marketChange)
                 tvDayDelta.text = itemView.context.getString(R.string.label_day_delta,

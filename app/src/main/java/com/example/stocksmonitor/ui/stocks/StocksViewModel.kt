@@ -6,11 +6,10 @@ import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.repository.StocksRepository
 import com.example.stocksmonitor.ui.BaseViewModel
 import com.example.stocksmonitor.utils.Resource
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class StocksViewModel(
-    private val stocksRepository: StocksRepository
+   private val stocksRepository: StocksRepository
 ) : BaseViewModel() {
 
     private val _stocks = MutableLiveData<Resource<List<Stock>>>()
@@ -24,10 +23,5 @@ class StocksViewModel(
             _stocks.value = stocksRepository.getStocks()
             _stocks.value = Resource.Loading(false)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        coroutineContext.cancel()
     }
 }
