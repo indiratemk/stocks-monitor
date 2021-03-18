@@ -45,4 +45,15 @@
     <style name="TabButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="background">@android:color/transparent</item>
     </style>
+
+    <style name="HintButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/shp_hint_bg</item>
+        <item name="android:textAppearance">@style/PrimarySemiBoldText12</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
 </resources>
