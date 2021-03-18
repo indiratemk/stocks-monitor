@@ -8,8 +8,8 @@ class StocksLocalDataSource(
 ) {
 
     // TODO: 3/13/21 Can throw exception?
-    suspend fun getStocks(): Resource<List<Stock>> {
-        return Resource.Success(stockDao.getStocks())
+    suspend fun getStocks(): List<Stock> {
+        return stockDao.getStocks()
     }
 
     suspend fun addStock(stock: Stock) {

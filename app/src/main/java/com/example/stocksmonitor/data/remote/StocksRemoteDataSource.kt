@@ -1,7 +1,7 @@
 package com.example.stocksmonitor.data.remote
 
-import com.example.stocksmonitor.utils.Resource
 import com.example.stocksmonitor.data.models.Stock
+import com.example.stocksmonitor.data.models.TickersResponse
 import com.example.stocksmonitor.utils.Constants
 
 class StocksRemoteDataSource(
@@ -9,15 +9,28 @@ class StocksRemoteDataSource(
 ) {
 
     @Throws(Exception::class)
-    suspend fun getStocks(): Resource<List<Stock>> {
+    suspend fun getStocks(): List<Stock> {
         try {
             val response = mboumApi.getStocks(Constants.TICKERS)
             if (response.isSuccessful) {
-                return Resource.Success(response.body()!!)
+                return response.body()!!
             }
-            return Resource.Error(response.message())
+            throw Exception(response.message())
         } catch (e: Exception) {
-            return Resource.Error(e.message ?: e.toString())
+            throw Exception(e.message ?: e.toString())
+        }
+    }
+
+    @Throws(Exception::class)
+    suspend fun getPopularTickers(): List<TickersResponse> {
+        try {
+            val response = mboumApi.getPopularTickers()
+            if (response.isSuccessful) {
+                return response.body()!!
+            }
+            throw Exception(response.message())
+        } catch (e: Exception) {
+            throw Exception(e.message ?: e.toString())
         }
     }
 }

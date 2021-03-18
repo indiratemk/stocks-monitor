@@ -12,4 +12,6 @@ interface StocksRepository {
     suspend fun addFavouriteStock(stock: Stock)
 
     suspend fun removeFavouriteStock(stock: Stock)
+
+    suspend fun getPopularTickers(): Resource<List<String>>
 }

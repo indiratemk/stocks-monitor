@@ -1,11 +1,7 @@
 package com.example.stocksmonitor.utils
 
-sealed class Resource<T>(
-    val data: T? = null,
-    val message: String? = null,
-    val isLoading: Boolean = false
-) {
-    class Success<T>(data: T): Resource<T>(data = data)
-    class Loading<T>(isLoading: Boolean): Resource<T>(isLoading = isLoading)
-    class Error<T>(message: String): Resource<T>(message = message)
+sealed class Resource<out T : Any> {
+    data class Success<out T : Any>(val data: T): Resource<T>()
+    data class Loading(val isLoading: Boolean): Resource<Nothing>()
+    data class Error(val message: String): Resource<Nothing>()
 }

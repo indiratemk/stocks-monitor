@@ -10,4 +10,5 @@ object Constants {
     const val IMAGES_URL = "https://finnhub.io/api/logo?symbol="
     const val DB_NAME = "stocks_monitor_database"
     const val USD_CURRENCY = "USD"
+    const val MAX_SEARCH_HINTS_COUNT = 20
 }

@@ -43,7 +43,7 @@ class FavouriteFragment : Fragment(), StockClickListener {
         favouriteStocksViewModel.favouriteStocks.observe(viewLifecycleOwner, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> binding.refreshLayout.isRefreshing = resource.isLoading
-                is Resource.Success -> stocksAdapter.setStocks(resource.data!!)
+                is Resource.Success -> stocksAdapter.setStocks(resource.data)
                 is Resource.Error -> Toast.makeText(requireContext(), resource.message,
                         Toast.LENGTH_SHORT).show()
             }
