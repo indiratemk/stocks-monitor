@@ -6,4 +6,7 @@
     <string name="desc_favourite">Add to/remove from favourite</string>
     <string name="label_positive_market_change">+%s</string>
     <string name="label_day_delta">%1$s (%2$s%%)</string>
+    <string name="label_popular_requests">Popular requests</string>
+    <string name="label_searched_requests">You\'ve searched for this</string>
+    <string name="btn_show_more">Show more</string>
 </resources>

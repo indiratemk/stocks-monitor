@@ -6,8 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.stocksmonitor.R
 import com.example.stocksmonitor.databinding.MainActivityBinding
-import com.example.stocksmonitor.ui.stocks.StocksViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import com.example.stocksmonitor.ui.search.SearchActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -18,14 +17,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
         initUI()
     }
 
     private fun initUI() {
         initPager()
         with(binding) {
+            btnSearch.setOnClickListener { SearchActivity.startActivity(this@MainActivity) }
             btnStocks.isSelected = true
             btnFavourite.isSelected = false
             btnStocks.setOnClickListener {
