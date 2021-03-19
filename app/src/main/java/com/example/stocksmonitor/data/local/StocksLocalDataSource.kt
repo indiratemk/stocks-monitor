@@ -1,7 +1,6 @@
 package com.example.stocksmonitor.data.local
 
 import com.example.stocksmonitor.data.models.Stock
-import com.example.stocksmonitor.utils.Resource
 
 class StocksLocalDataSource(
     private val stockDao: StockDao

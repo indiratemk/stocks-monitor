@@ -10,27 +10,11 @@ class StocksRemoteDataSource(
 
     @Throws(Exception::class)
     suspend fun getStocks(): List<Stock> {
-        try {
-            val response = mboumApi.getStocks(Constants.TICKERS)
-            if (response.isSuccessful) {
-                return response.body()!!
-            }
-            throw Exception(response.message())
-        } catch (e: Exception) {
-            throw Exception(e.message ?: e.toString())
-        }
+        return handleResponse { mboumApi.getStocks(Constants.TICKERS) }
     }
 
     @Throws(Exception::class)
     suspend fun getPopularTickers(): List<TickersResponse> {
-        try {
-            val response = mboumApi.getPopularTickers()
-            if (response.isSuccessful) {
-                return response.body()!!
-            }
-            throw Exception(response.message())
-        } catch (e: Exception) {
-            throw Exception(e.message ?: e.toString())
-        }
+        return handleResponse { mboumApi.getPopularTickers() }
     }
 }
