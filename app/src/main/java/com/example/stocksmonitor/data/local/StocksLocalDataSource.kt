@@ -7,15 +7,15 @@ class StocksLocalDataSource(
 ) {
 
     // TODO: 3/13/21 Can throw exception?
-    suspend fun getStocks(): List<Stock> {
-        return stockDao.getStocks()
+    suspend fun getFavouriteStocks(): List<Stock> {
+        return stockDao.getFavouriteStocks()
     }
 
-    suspend fun addStock(stock: Stock) {
-        stockDao.insertStock(stock)
+    suspend fun addFavouriteStock(stock: Stock) {
+        stockDao.insertFavouriteStock(stock)
     }
 
-    suspend fun removeStock(stock: Stock) {
-        stockDao.deleteStock(stock)
+    suspend fun removeFavouriteStock(stock: Stock) {
+        stockDao.deleteFavouriteStock(stock)
     }
 }

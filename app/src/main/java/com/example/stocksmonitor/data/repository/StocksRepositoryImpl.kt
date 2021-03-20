@@ -14,7 +14,7 @@ class StocksRepositoryImpl(
     override suspend fun getStocks(): Resource<List<Stock>> {
         return Resource.fromAction {
             val stocks = stocksRemoteDataSource.getStocks()
-            val favouriteStocks = stocksLocalDataSource.getStocks()
+            val favouriteStocks = stocksLocalDataSource.getFavouriteStocks()
             stocks.forEach { stock ->
                 if (favouriteStocks.contains(stock)) {
                     stock.isFavourite = true
@@ -26,16 +26,16 @@ class StocksRepositoryImpl(
 
     // TODO: 3/19/21 Переписать на Resource.fromAction() ???
     override suspend fun getFavouriteStocks(): Resource<List<Stock>> {
-        val stocks = stocksLocalDataSource.getStocks()
+        val stocks = stocksLocalDataSource.getFavouriteStocks()
         return Resource.Success(stocks)
     }
 
     override suspend fun addFavouriteStock(stock: Stock) {
-        stocksLocalDataSource.addStock(stock)
+        stocksLocalDataSource.addFavouriteStock(stock)
     }
 
     override suspend fun removeFavouriteStock(stock: Stock) {
-       stocksLocalDataSource.removeStock(stock)
+       stocksLocalDataSource.removeFavouriteStock(stock)
     }
 
     override suspend fun getPopularTickers(): Resource<List<String>> {
@@ -49,6 +49,18 @@ class StocksRepositoryImpl(
                 count == null || tickers.isNullOrEmpty() -> emptyList()
                 else -> tickers.take(if (count > MAX_HINTS_COUNT) MAX_HINTS_COUNT else count)
             }
+        }
+    }
+
+    override suspend fun getStock(ticker: String): Resource<Stock> {
+        return Resource.fromAction {
+            val stocks = stocksRemoteDataSource.getStock(ticker)
+            if (stocks.isNullOrEmpty()) {
+                Resource.Error("Stock not found")
+            }
+            val stock = stocks[0]
+            val isFavourite = stocksLocalDataSource.getFavouriteStocks().contains(stock)
+            stock.copy(isFavourite = isFavourite)
         }
     }
 }

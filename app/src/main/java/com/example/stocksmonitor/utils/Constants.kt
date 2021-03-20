@@ -11,4 +11,5 @@ object Constants {
     const val DB_NAME = "stocks_monitor_database"
     const val USD_CURRENCY = "USD"
     const val MAX_HINTS_COUNT = 20
+    const val REQUEST_SEARCH = 701
 }

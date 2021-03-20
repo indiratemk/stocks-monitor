@@ -7,11 +7,11 @@ import com.example.stocksmonitor.data.models.Stock
 interface StockDao {
 
     @Query("SELECT * FROM stocks")
-    suspend fun getStocks(): List<Stock>
+    suspend fun getFavouriteStocks(): List<Stock>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertStock(stock: Stock)
+    suspend fun insertFavouriteStock(stock: Stock)
 
     @Delete
-    suspend fun deleteStock(stock: Stock)
+    suspend fun deleteFavouriteStock(stock: Stock)
 }

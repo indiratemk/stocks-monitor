@@ -1,5 +1,6 @@
 package com.example.stocksmonitor.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.core.content.ContextCompat
 import com.example.stocksmonitor.R
 import com.example.stocksmonitor.databinding.MainActivityBinding
 import com.example.stocksmonitor.ui.search.SearchActivity
+import com.example.stocksmonitor.utils.Constants
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +26,10 @@ class MainActivity : AppCompatActivity() {
     private fun initUI() {
         initPager()
         with(binding) {
-            btnSearch.setOnClickListener { SearchActivity.startActivity(this@MainActivity) }
+            btnSearch.setOnClickListener {
+                SearchActivity.startActivityForResult(this@MainActivity,
+                    Constants.REQUEST_SEARCH)
+            }
             btnStocks.isSelected = true
             btnFavourite.isSelected = false
             btnStocks.setOnClickListener {
@@ -63,5 +68,10 @@ class MainActivity : AppCompatActivity() {
             ))
             button.textSize = 18f
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        pagerAdapter.notifyActivityResult(requestCode, resultCode, data)
     }
 }

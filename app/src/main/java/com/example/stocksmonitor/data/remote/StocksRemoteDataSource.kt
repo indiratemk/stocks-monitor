@@ -17,4 +17,9 @@ class StocksRemoteDataSource(
     suspend fun getPopularTickers(): List<TickersResponse> {
         return handleResponse { mboumApi.getPopularTickers() }
     }
+
+    @Throws(Exception::class)
+    suspend fun getStock(ticker: String): List<Stock> {
+        return handleResponse { mboumApi.getStocks(ticker) }
+    }
 }

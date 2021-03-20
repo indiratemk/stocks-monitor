@@ -1,5 +1,6 @@
 package com.example.stocksmonitor.ui
 
+import android.content.Intent
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -33,6 +34,12 @@ class PagerAdapter(
         fragments.add(POSITION_STOCKS, StocksFragment())
         fragments.add(POSITION_FAVOURITE, FavouriteFragment())
         notifyDataSetChanged()
+    }
+
+    fun notifyActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        for (fragment in fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {

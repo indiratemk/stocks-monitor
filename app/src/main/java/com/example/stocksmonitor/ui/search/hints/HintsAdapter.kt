@@ -7,6 +7,7 @@ import com.example.stocksmonitor.databinding.HintItemBinding
 
 class HintsAdapter : RecyclerView.Adapter<HintVH>() {
 
+    var listener: HintClickListener? = null
     var hints = listOf<String>()
         set(value) {
             field = value
@@ -19,9 +20,8 @@ class HintsAdapter : RecyclerView.Adapter<HintVH>() {
     }
 
     override fun onBindViewHolder(holder: HintVH, position: Int) {
-        holder.bind(hints[position])
+        holder.bind(hints[position], listener)
     }
 
     override fun getItemCount() = hints.size
-
 }

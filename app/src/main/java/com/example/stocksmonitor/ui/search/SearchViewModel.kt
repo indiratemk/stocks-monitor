@@ -2,6 +2,7 @@ package com.example.stocksmonitor.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.repository.StocksRepository
 import com.example.stocksmonitor.ui.BaseViewModel
 import com.example.stocksmonitor.utils.Resource
@@ -12,15 +13,26 @@ class SearchViewModel(
 ) : BaseViewModel() {
 
     private val _popularTickers = MutableLiveData<Resource<List<String>>>()
+    private val _stock = MutableLiveData<Resource<Stock>>()
 
     val popularTickers: LiveData<Resource<List<String>>>
         get() = _popularTickers
+    val stock: LiveData<Resource<Stock>>
+        get() = _stock
 
     fun getPopularTickers() {
         coroutineContext.launch {
             _popularTickers.value = Resource.Loading(true)
             _popularTickers.value = stocksRepository.getPopularTickers()
             _popularTickers.value = Resource.Loading(false)
+        }
+    }
+
+    fun getStock(ticker: String) {
+        coroutineContext.launch {
+            _stock.value = Resource.Loading(true)
+            _stock.value = stocksRepository.getStock(ticker)
+            _stock.value = Resource.Loading(false)
         }
     }
 }

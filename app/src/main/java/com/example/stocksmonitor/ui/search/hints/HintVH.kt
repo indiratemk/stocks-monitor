@@ -7,7 +7,10 @@ class HintVH(
     private val binding: HintItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(hint: String) {
-        binding.btnHint.text = hint
+    fun bind(hint: String, listener: HintClickListener?) {
+        with(binding.btnHint) {
+            text = hint
+            setOnClickListener { listener?.onHintClick(hint) }
+        }
     }
 }

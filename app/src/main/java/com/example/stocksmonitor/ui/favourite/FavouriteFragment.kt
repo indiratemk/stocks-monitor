@@ -1,5 +1,7 @@
 package com.example.stocksmonitor.ui.favourite
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.databinding.FavouriteFragmentBinding
 import com.example.stocksmonitor.ui.stocks.StockClickListener
 import com.example.stocksmonitor.ui.stocks.StocksAdapter
+import com.example.stocksmonitor.utils.Constants
 import com.example.stocksmonitor.utils.Resource
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -59,7 +62,7 @@ class FavouriteFragment : Fragment(), StockClickListener {
 
     private fun initUI() {
         initRV()
-        binding.refreshLayout.setOnRefreshListener {favouriteStocksViewModel.getFavouriteStocks() }
+        binding.refreshLayout.setOnRefreshListener { favouriteStocksViewModel.getFavouriteStocks() }
     }
 
     private fun initRV() {
@@ -68,6 +71,13 @@ class FavouriteFragment : Fragment(), StockClickListener {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = stocksAdapter
             setHasFixedSize(true)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Constants.REQUEST_SEARCH && resultCode == Activity.RESULT_OK) {
+            favouriteStocksViewModel.getFavouriteStocks()
         }
     }
 
