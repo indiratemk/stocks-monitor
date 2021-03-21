@@ -11,16 +11,20 @@ class StocksRepositoryImpl(
     private val stocksLocalDataSource: StocksLocalDataSource
 ) : StocksRepository {
 
+    private val getStocksAction: suspend (String) -> List<Stock> = { tickers ->
+        val stocks = stocksRemoteDataSource.getStocks(tickers)
+        val favouriteStocks = stocksLocalDataSource.getFavouriteStocks()
+        stocks.forEach { stock ->
+            if (favouriteStocks.contains(stock)) {
+                stock.isFavourite = true
+            }
+        }
+        stocks
+    }
+
     override suspend fun getStocks(tickers: String): Resource<List<Stock>> {
         return Resource.fromAction {
-            val stocks = stocksRemoteDataSource.getStocks(tickers)
-            val favouriteStocks = stocksLocalDataSource.getFavouriteStocks()
-            stocks.forEach { stock ->
-                if (favouriteStocks.contains(stock)) {
-                    stock.isFavourite = true
-                }
-            }
-            stocks
+            getStocksAction(tickers)
         }
     }
 
@@ -65,15 +69,17 @@ class StocksRepositoryImpl(
     }
 
     override suspend fun searchStocks(query: String): Resource<List<Stock>> {
-        val stocksShort = stocksRemoteDataSource.searchStocks(query).stocks
-        if (stocksShort.isEmpty()) {
-            Resource.Error("Stocks not found")
+        return Resource.fromAction {
+            val stocksShort = stocksRemoteDataSource.searchStocks(query).stocks
+            if (stocksShort.isEmpty()) {
+                Resource.Error("Stocks not found")
+            }
+            var tickers = ""
+            stocksShort.forEach {
+                tickers += "${it.symbol},"
+            }
+            tickers = tickers.substring(0, tickers.length - 1)
+            getStocksAction(tickers)
         }
-        var tickers = ""
-        stocksShort.forEach {
-            tickers += "${it.symbol},"
-        }
-        tickers = tickers.substring(0, tickers.length - 1)
-        return getStocks(tickers)
     }
 }
