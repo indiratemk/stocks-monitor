@@ -4,6 +4,8 @@ object Constants {
 
     const val MBOUM_URL = "https://mboum.com/api/v1/"
     const val MBOUM_API_KEY = "Aln23OOuedgyQVrvZY6bBdlat9BFfzbnnwvCiS4Utd8kC7OvWSlFXXjHaiHt"
+    const val FINNHUB_URL = "https://finnhub.io/api/v1/"
+    const val FINNHUB_API_KEY = "c0ln4cn48v6orbr1itrg"
     const val TICKERS = "AAPL,MSFT,AMZN,FB,JPM,BRK.B,JNJ,GOOG,GOOGL,XOM,BAC,WFC,INTC,T,V,CSCO,CVX," +
             "UNH,PFE,HD,PG,VZ,C,ABBV,BA,KO,CMCSA,MA,PM,DWDP,PEP,ORCL,DIS,MRK,NVDA,MMM,AMGN," +
             "IBM,NFLX,WMT,MO,MCD,GE,HON,MDT"

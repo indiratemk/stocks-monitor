@@ -3,7 +3,9 @@ package com.example.stocksmonitor.ui.search
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -68,11 +70,31 @@ class SearchActivity :
                     Toast.LENGTH_SHORT).show()
             }
         })
+
+        searchViewModel.stocks.observe(this, Observer { resource ->
+            when (resource) {
+                is Resource.Loading -> {}
+                is Resource.Success -> {
+                    stocksAdapter.setStocks(resource.data)
+                    binding.llRequests.visibility = View.GONE
+                    binding.clStocks.visibility = View.VISIBLE
+                }
+                is Resource.Error -> Toast.makeText(this, resource.message,
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun initUI() {
         with(binding) {
             tilSearch.setStartIconOnClickListener { finish() }
+            etSearch.setOnEditorActionListener { _, actionId, event ->
+                if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) ||
+                        actionId == EditorInfo.IME_ACTION_DONE) {
+                    searchViewModel.searchStocks(etSearch.text.toString().trim())
+                }
+                true
+            }
         }
         initRV()
     }

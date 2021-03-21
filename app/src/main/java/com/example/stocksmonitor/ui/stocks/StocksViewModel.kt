@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.repository.StocksRepository
 import com.example.stocksmonitor.ui.BaseViewModel
+import com.example.stocksmonitor.utils.Constants
 import com.example.stocksmonitor.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -20,7 +21,7 @@ class StocksViewModel(
     fun getStocks() {
         coroutineContext.launch {
             _stocks.value = Resource.Loading(true)
-            _stocks.value = stocksRepository.getStocks()
+            _stocks.value = stocksRepository.getStocks(Constants.TICKERS)
             _stocks.value = Resource.Loading(false)
         }
     }

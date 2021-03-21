@@ -14,11 +14,14 @@ class SearchViewModel(
 
     private val _popularTickers = MutableLiveData<Resource<List<String>>>()
     private val _stock = MutableLiveData<Resource<Stock>>()
+    private val _stocks = MutableLiveData<Resource<List<Stock>>>()
 
     val popularTickers: LiveData<Resource<List<String>>>
         get() = _popularTickers
     val stock: LiveData<Resource<Stock>>
         get() = _stock
+    val stocks: LiveData<Resource<List<Stock>>>
+        get() = _stocks
 
     fun getPopularTickers() {
         coroutineContext.launch {
@@ -33,6 +36,14 @@ class SearchViewModel(
             _stock.value = Resource.Loading(true)
             _stock.value = stocksRepository.getStock(ticker)
             _stock.value = Resource.Loading(false)
+        }
+    }
+
+    fun searchStocks(query: String) {
+        coroutineContext.launch {
+            _stocks.value = Resource.Loading(true)
+            _stocks.value = stocksRepository.searchStocks(query)
+            _stocks.value = Resource.Loading(false)
         }
     }
 }

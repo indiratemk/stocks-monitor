@@ -5,7 +5,7 @@ import com.example.stocksmonitor.utils.Resource
 
 interface StocksRepository {
 
-    suspend fun getStocks(): Resource<List<Stock>>
+    suspend fun getStocks(tickers: String): Resource<List<Stock>>
 
     suspend fun getFavouriteStocks(): Resource<List<Stock>>
 
@@ -16,4 +16,6 @@ interface StocksRepository {
     suspend fun getPopularTickers(): Resource<List<String>>
 
     suspend fun getStock(ticker: String): Resource<Stock>
+
+    suspend fun searchStocks(query: String): Resource<List<Stock>>
 }
