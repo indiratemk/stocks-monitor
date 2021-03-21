@@ -61,16 +61,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginBottom="4dp"
                 android:text="@string/label_popular_requests" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPopularRequests"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
-                android:paddingEnd="12dp" />
+                android:paddingEnd="12dp"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/hintsPlaceholderLayout"
+                layout="@layout/hints_placeholder" />
 
             <TextView
                 android:id="@+id/tvSearchedRequests"
@@ -80,7 +85,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="20dp"
-                android:text="@string/label_searched_requests" />
+                android:text="@string/label_searched_requests"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSearchedRequests"
@@ -89,7 +95,8 @@
                 android:layout_marginTop="4dp"
                 android:clipToPadding="false"
                 android:paddingStart="16dp"
-                android:paddingEnd="12dp" />
+                android:paddingEnd="12dp"
+                android:visibility="gone" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

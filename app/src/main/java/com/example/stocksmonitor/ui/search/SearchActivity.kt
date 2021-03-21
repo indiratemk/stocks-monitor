@@ -51,7 +51,17 @@ class SearchActivity :
     private fun subscribeObservers() {
         searchViewModel.popularTickers.observe(this, Observer { resource ->
             when (resource) {
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    with(binding) {
+                        if (resource.isLoading) {
+                            hintsPlaceholderLayout.shimmerLayout.startShimmer()
+                        } else {
+                            hintsPlaceholderLayout.shimmerLayout.stopShimmer()
+                            hintsPlaceholderLayout.shimmerLayout.visibility = View.GONE
+                            rvPopularRequests.visibility = View.VISIBLE
+                        }
+                    }
+                }
                 is Resource.Success -> popularRequestsAdapter.hints = resource.data
                 is Resource.Error -> Toast.makeText(this, resource.message,
                     Toast.LENGTH_SHORT).show()
