@@ -24,42 +24,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvTicker"
-            style="@style/PrimaryBoldText18"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/llTickerContainer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginEnd="16dp"
             android:layout_marginStart="12dp"
             app:layout_constraintBottom_toTopOf="@id/tvCompanyName"
             app:layout_constraintStart_toEndOf="@id/ivLogo"
             app:layout_constraintTop_toTopOf="@id/ivLogo"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="YNDX" />
+            app:layout_constraintEnd_toStartOf="@id/tvCurrentPrice"
+            app:layout_constraintVertical_chainStyle="packed">
 
-        <TextView
-            android:id="@+id/tvCompanyName"
-            style="@style/PrimarySemiBoldText11"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="@id/ivLogo"
-            app:layout_constraintEnd_toStartOf="@+id/tvDayDelta"
-            app:layout_constraintStart_toStartOf="@id/tvTicker"
-            app:layout_constraintTop_toBottomOf="@id/tvTicker"
-            tools:text="Yandex, LLC" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/chbFavourite"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="8dp"
-            android:contentDescription="@string/desc_favourite"
-            app:layout_constraintBottom_toBottomOf="@id/tvTicker"
-            app:layout_constraintStart_toEndOf="@id/tvTicker"
-            app:layout_constraintTop_toTopOf="@id/tvTicker"
-            android:button="@drawable/favourite_chb" />
+                <TextView
+                    android:id="@+id/tvTicker"
+                    style="@style/PrimaryBoldText18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    tools:text="YNDX" />
+
+                <CheckBox
+                    android:id="@+id/chbFavourite"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="0"
+                    android:button="@drawable/favourite_chb"
+                    android:contentDescription="@string/desc_favourite" />
+            </LinearLayout>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tvCurrentPrice"
@@ -72,6 +74,20 @@
             app:layout_constraintTop_toTopOf="@+id/ivLogo"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="$72.16" />
+
+        <TextView
+            android:id="@+id/tvCompanyName"
+            style="@style/PrimarySemiBoldText11"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/ivLogo"
+            app:layout_constraintEnd_toStartOf="@+id/tvDayDelta"
+            app:layout_constraintStart_toStartOf="@id/llTickerContainer"
+            app:layout_constraintTop_toBottomOf="@id/llTickerContainer"
+            tools:text="Yandex, LLC" />
 
         <TextView
             android:id="@+id/tvDayDelta"
