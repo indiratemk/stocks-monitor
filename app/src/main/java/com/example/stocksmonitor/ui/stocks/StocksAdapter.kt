@@ -8,6 +8,10 @@ import com.example.stocksmonitor.databinding.StockItemBinding
 
 class StocksAdapter : RecyclerView.Adapter<StockVH>() {
 
+    companion object {
+        private const val NOT_CONTAIN_ITEM = -1
+    }
+
     private var stocks = ArrayList<Stock>()
     var listener: StockClickListener? = null
 
@@ -42,6 +46,8 @@ class StocksAdapter : RecyclerView.Adapter<StockVH>() {
 
     fun updateStock(stock: Stock) {
         val position = stocks.indexOfFirst { it.symbol == stock.symbol }
+        if (position == NOT_CONTAIN_ITEM)
+            return
         this.stocks[position] = stock
         notifyItemChanged(position)
     }
