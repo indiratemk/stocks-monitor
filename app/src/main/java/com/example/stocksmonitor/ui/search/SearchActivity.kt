@@ -83,11 +83,22 @@ class SearchActivity :
 
         searchViewModel.stocks.observe(this, Observer { resource ->
             when (resource) {
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    with(binding) {
+                        if (resource.isLoading) {
+                            llRequests.visibility = View.GONE
+                            clStocks.visibility = View.GONE
+                            stocksPlaceholderLayout.shimmerLayout.startShimmer()
+                            stocksPlaceholderLayout.shimmerLayout.visibility = View.VISIBLE
+                        } else {
+                            clStocks.visibility = View.VISIBLE
+                            stocksPlaceholderLayout.shimmerLayout.stopShimmer()
+                            stocksPlaceholderLayout.shimmerLayout.visibility = View.GONE
+                        }
+                    }
+                }
                 is Resource.Success -> {
                     stocksAdapter.setStocks(resource.data)
-                    binding.llRequests.visibility = View.GONE
-                    binding.clStocks.visibility = View.VISIBLE
                 }
                 is Resource.Error -> Toast.makeText(this, resource.message,
                     Toast.LENGTH_SHORT).show()
