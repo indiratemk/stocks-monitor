@@ -2,8 +2,8 @@ package com.example.stocksmonitor.data.models
 
 import com.google.gson.annotations.SerializedName
 
-data class SearchStocks(
+data class Ticker(
 
-    @SerializedName("result")
-    val stocks: List<StockShort>
+    @SerializedName("symbol")
+    val symbol: String
 )

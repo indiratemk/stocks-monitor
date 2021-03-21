@@ -70,16 +70,16 @@ class StocksRepositoryImpl(
 
     override suspend fun searchStocks(query: String): Resource<List<Stock>> {
         return Resource.fromAction {
-            val stocksShort = stocksRemoteDataSource.searchStocks(query).stocks
-            if (stocksShort.isEmpty()) {
+            val tickers = stocksRemoteDataSource.searchTickers(query).tickers
+            if (tickers.isEmpty()) {
                 Resource.Error("Stocks not found")
             }
-            var tickers = ""
-            stocksShort.forEach {
-                tickers += "${it.symbol},"
+            var tickersQuery = ""
+            tickers.forEach {
+                tickersQuery += "${it.symbol},"
             }
-            tickers = tickers.substring(0, tickers.length - 1)
-            getStocksAction(tickers)
+            tickersQuery = tickersQuery.substring(0, tickersQuery.length - 1)
+            getStocksAction(tickersQuery)
         }
     }
 }
