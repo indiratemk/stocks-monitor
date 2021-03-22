@@ -48,7 +48,12 @@
         android:paddingTop="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/svRequestsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
             android:id="@+id/llRequests"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,6 +103,8 @@
                 android:paddingEnd="12dp"
                 android:visibility="gone" />
         </LinearLayout>
+
+        </ScrollView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clStocks"

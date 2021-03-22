@@ -1,8 +1,8 @@
 package com.example.stocksmonitor.data.repository
 
 import com.example.stocksmonitor.data.local.StocksLocalDataSource
-import com.example.stocksmonitor.data.remote.StocksRemoteDataSource
 import com.example.stocksmonitor.data.models.Stock
+import com.example.stocksmonitor.data.remote.StocksRemoteDataSource
 import com.example.stocksmonitor.utils.Constants.MAX_HINTS_COUNT
 import com.example.stocksmonitor.utils.Resource
 
@@ -56,30 +56,31 @@ class StocksRepositoryImpl(
         }
     }
 
-    override suspend fun getStock(ticker: String): Resource<Stock> {
-        return Resource.fromAction {
-            val stocks = stocksRemoteDataSource.getStocks(ticker)
-            if (stocks.isNullOrEmpty()) {
-                Resource.Error("Stock not found")
-            }
-            val stock = stocks[0]
-            val isFavourite = stocksLocalDataSource.getFavouriteStocks().contains(stock)
-            stock.copy(isFavourite = isFavourite)
-        }
-    }
-
     override suspend fun searchStocks(query: String): Resource<List<Stock>> {
         return Resource.fromAction {
             val tickers = stocksRemoteDataSource.searchTickers(query).tickers
             if (tickers.isEmpty()) {
                 Resource.Error("Stocks not found")
             }
-            var tickersQuery = ""
-            tickers.forEach {
-                tickersQuery += "${it.symbol},"
-            }
-            tickersQuery = tickersQuery.substring(0, tickersQuery.length - 1)
+            val tickersQuery = tickers.joinToString(separator = ",") { it.symbol }
             getStocksAction(tickersQuery)
+        }
+    }
+
+    override suspend fun addSearchedQuery(query: String) {
+        var queries = mutableSetOf<String>()
+        queries.addAll(stocksLocalDataSource.searchedQueries)
+        if (queries.size >= MAX_HINTS_COUNT) {
+            queries = mutableSetOf(queries.toMutableList().removeAt(0))
+        }
+        queries.add(query)
+        stocksLocalDataSource.searchedQueries = queries
+    }
+
+    override suspend fun getSearchedQueries(): Resource<List<String>> {
+        return Resource.fromAction {
+            val queries = stocksLocalDataSource.searchedQueries
+            queries.toList()
         }
     }
 }

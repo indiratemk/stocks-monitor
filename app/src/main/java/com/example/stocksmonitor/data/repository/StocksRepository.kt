@@ -15,7 +15,9 @@ interface StocksRepository {
 
     suspend fun getPopularTickers(): Resource<List<String>>
 
-    suspend fun getStock(ticker: String): Resource<Stock>
-
     suspend fun searchStocks(query: String): Resource<List<Stock>>
+
+    suspend fun getSearchedQueries(): Resource<List<String>>
+
+    suspend fun addSearchedQuery(query: String)
 }

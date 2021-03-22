@@ -13,13 +13,13 @@ class SearchViewModel(
 ) : BaseViewModel() {
 
     private val _popularTickers = MutableLiveData<Resource<List<String>>>()
-    private val _stock = MutableLiveData<Resource<Stock>>()
+    private val _searchedQueries = MutableLiveData<Resource<List<String>>>()
     private val _stocks = MutableLiveData<Resource<List<Stock>>>()
 
     val popularTickers: LiveData<Resource<List<String>>>
         get() = _popularTickers
-    val stock: LiveData<Resource<Stock>>
-        get() = _stock
+    val searchedQueries: LiveData<Resource<List<String>>>
+        get() = _searchedQueries
     val stocks: LiveData<Resource<List<Stock>>>
         get() = _stocks
 
@@ -31,11 +31,15 @@ class SearchViewModel(
         }
     }
 
-    fun getStock(ticker: String) {
+    fun getSearchedQueries() {
         coroutineContext.launch {
-            _stock.value = Resource.Loading(true)
-            _stock.value = stocksRepository.getStock(ticker)
-            _stock.value = Resource.Loading(false)
+            _searchedQueries.value = stocksRepository.getSearchedQueries()
+        }
+    }
+
+    fun addSearchedQuery(query: String) {
+        coroutineContext.launch {
+            stocksRepository.addSearchedQuery(query)
         }
     }
 

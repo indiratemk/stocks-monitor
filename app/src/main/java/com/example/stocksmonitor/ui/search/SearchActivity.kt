@@ -19,6 +19,7 @@ import com.example.stocksmonitor.ui.search.hints.HintsAdapter
 import com.example.stocksmonitor.ui.stocks.StockClickListener
 import com.example.stocksmonitor.ui.stocks.StocksAdapter
 import com.example.stocksmonitor.utils.Resource
+import kotlinx.android.synthetic.main.search_activity.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchActivity :
@@ -37,6 +38,7 @@ class SearchActivity :
     private val searchViewModel: SearchViewModel by viewModel()
     private val favouriteStocksViewModel: FavouriteStocksViewModel by viewModel()
     private val popularRequestsAdapter = HintsAdapter()
+    private val searchedQueriesAdapter = HintsAdapter()
     private val stocksAdapter = StocksAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +48,7 @@ class SearchActivity :
         subscribeObservers()
         initUI()
         searchViewModel.getPopularTickers()
+        searchViewModel.getSearchedQueries()
     }
 
     private fun subscribeObservers() {
@@ -68,16 +71,17 @@ class SearchActivity :
             }
         })
 
-        searchViewModel.stock.observe(this, Observer { resource ->
+        searchViewModel.searchedQueries.observe(this, Observer { resource ->
             when (resource) {
-                is Resource.Loading -> {}
                 is Resource.Success -> {
-                    stocksAdapter.setStocks(listOf(resource.data))
-                    binding.llRequests.visibility = View.GONE
-                    binding.clStocks.visibility = View.VISIBLE
+                    val searchedQueries = resource.data
+                    if (searchedQueries.isNotEmpty()) {
+                        searchedQueriesAdapter.hints = searchedQueries
+                        tvSearchedRequests.visibility = View.VISIBLE
+                        rvSearchedRequests.visibility = View.VISIBLE
+                    }
                 }
-                is Resource.Error -> Toast.makeText(this, resource.message,
-                    Toast.LENGTH_SHORT).show()
+                else -> {}
             }
         })
 
@@ -86,7 +90,7 @@ class SearchActivity :
                 is Resource.Loading -> {
                     with(binding) {
                         if (resource.isLoading) {
-                            llRequests.visibility = View.GONE
+                            svRequestsContainer.visibility = View.GONE
                             clStocks.visibility = View.GONE
                             stocksPlaceholderLayout.shimmerLayout.startShimmer()
                             stocksPlaceholderLayout.shimmerLayout.visibility = View.VISIBLE
@@ -110,9 +114,10 @@ class SearchActivity :
         with(binding) {
             tilSearch.setStartIconOnClickListener { finish() }
             etSearch.setOnEditorActionListener { _, actionId, event ->
-                if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) ||
-                        actionId == EditorInfo.IME_ACTION_DONE) {
-                    searchViewModel.searchStocks(etSearch.text.toString().trim())
+                if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) || actionId == EditorInfo.IME_ACTION_DONE) {
+                    val query = etSearch.text.toString().trim()
+                    searchViewModel.searchStocks(query)
+                    searchViewModel.addSearchedQuery(query)
                 }
                 true
             }
@@ -129,6 +134,14 @@ class SearchActivity :
             setHasFixedSize(true)
         }
 
+        searchedQueriesAdapter.listener = this
+        with(binding.rvSearchedRequests) {
+            layoutManager = StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.HORIZONTAL)
+            adapter = searchedQueriesAdapter
+            setHasFixedSize(true)
+        }
+
         stocksAdapter.listener = this
         with(binding.rvStocks) {
             layoutManager = LinearLayoutManager(this@SearchActivity)
@@ -138,7 +151,7 @@ class SearchActivity :
     }
 
     override fun onHintClick(hint: String) {
-        searchViewModel.getStock(hint)
+        searchViewModel.searchStocks(hint)
     }
 
     override fun onFavouriteClick(stock: Stock) {
