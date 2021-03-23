@@ -24,6 +24,7 @@ class StockVH(
                 .placeholder(R.drawable.img_not_found)
                 .error(R.drawable.img_not_found)
                 .into(ivLogo)
+            handlePrice(stock)
             cvStock.setCardBackgroundColor(
                 if (adapterPosition % 2 == 0)
                     ContextCompat.getColor(itemView.context, R.color.grey_100)
@@ -32,7 +33,6 @@ class StockVH(
             )
             tvTicker.text = stock.symbol
             tvCompanyName.text = stock.longName
-            handlePrice(stock)
             chbFavourite.isChecked = stock.isFavourite
             chbFavourite.setOnClickListener {
                 stock.isFavourite = !stock.isFavourite
@@ -48,17 +48,13 @@ class StockVH(
                     currency = Currency.getInstance(stock.currency)
                     maximumFractionDigits = 2
                 }
-                null -> NumberFormat.getCurrencyInstance().apply {
-                    maximumFractionDigits = 2
-                }
+                null -> NumberFormat.getCurrencyInstance().apply { maximumFractionDigits = 2 }
                 else -> NumberFormat.getCurrencyInstance().apply {
                     currency = Currency.getInstance(stock.currency)
                     maximumFractionDigits = 2
                 }
             }
-            stock.regularPrice?.let {
-                tvCurrentPrice.text = currencyFormatter.format(it)
-            }
+            stock.regularPrice?.let { tvCurrentPrice.text = currencyFormatter.format(it) }
             stock.marketChange?.let { marketChange ->
                 val formattedPercent = String.format("%.2f", stock.marketChangePercent)
                 val formattedMarketChange = if (marketChange > 0)

@@ -8,23 +8,24 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.databinding.SearchActivityBinding
 import com.example.stocksmonitor.ui.favourite.FavouriteStocksViewModel
-import com.example.stocksmonitor.ui.search.hints.HintClickListener
-import com.example.stocksmonitor.ui.search.hints.HintsAdapter
+import com.example.stocksmonitor.ui.search.tags.TagClickListener
+import com.example.stocksmonitor.ui.search.tags.TagsAdapter
 import com.example.stocksmonitor.ui.stocks.StockClickListener
 import com.example.stocksmonitor.ui.stocks.StocksAdapter
+import com.example.stocksmonitor.utils.Constants
 import com.example.stocksmonitor.utils.Resource
-import kotlinx.android.synthetic.main.search_activity.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchActivity :
     AppCompatActivity(),
-    HintClickListener,
+    TagClickListener,
     StockClickListener {
 
     companion object {
@@ -37,8 +38,8 @@ class SearchActivity :
     private lateinit var binding: SearchActivityBinding
     private val searchViewModel: SearchViewModel by viewModel()
     private val favouriteStocksViewModel: FavouriteStocksViewModel by viewModel()
-    private val popularRequestsAdapter = HintsAdapter()
-    private val searchedQueriesAdapter = HintsAdapter()
+    private val popularQueriesAdapter = TagsAdapter()
+    private val searchedQueriesAdapter = TagsAdapter()
     private val stocksAdapter = StocksAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,15 +58,15 @@ class SearchActivity :
                 is Resource.Loading -> {
                     with(binding) {
                         if (resource.isLoading) {
-                            hintsPlaceholderLayout.shimmerLayout.startShimmer()
+                            tagsPlaceholderLayout.shimmerLayout.startShimmer()
                         } else {
-                            hintsPlaceholderLayout.shimmerLayout.stopShimmer()
-                            hintsPlaceholderLayout.shimmerLayout.visibility = View.GONE
-                            rvPopularRequests.visibility = View.VISIBLE
+                            tagsPlaceholderLayout.shimmerLayout.stopShimmer()
+                            tagsPlaceholderLayout.shimmerLayout.visibility = View.GONE
+                            rvPopularQueries.visibility = View.VISIBLE
                         }
                     }
                 }
-                is Resource.Success -> popularRequestsAdapter.hints = resource.data
+                is Resource.Success -> popularQueriesAdapter.tags = resource.data
                 is Resource.Error -> Toast.makeText(this, resource.message,
                     Toast.LENGTH_SHORT).show()
             }
@@ -76,9 +77,9 @@ class SearchActivity :
                 is Resource.Success -> {
                     val searchedQueries = resource.data
                     if (searchedQueries.isNotEmpty()) {
-                        searchedQueriesAdapter.hints = searchedQueries
-                        tvSearchedRequests.visibility = View.VISIBLE
-                        rvSearchedRequests.visibility = View.VISIBLE
+                        searchedQueriesAdapter.tags = searchedQueries
+                        binding.tvSearchedQueries.visibility = View.VISIBLE
+                        binding.rvSearchedQueries.visibility = View.VISIBLE
                     }
                 }
                 else -> {}
@@ -90,12 +91,12 @@ class SearchActivity :
                 is Resource.Loading -> {
                     with(binding) {
                         if (resource.isLoading) {
-                            svRequestsContainer.visibility = View.GONE
-                            clStocks.visibility = View.GONE
+                            scvQueriesContainer.visibility = View.GONE
+                            llStocks.visibility = View.GONE
                             stocksPlaceholderLayout.shimmerLayout.startShimmer()
                             stocksPlaceholderLayout.shimmerLayout.visibility = View.VISIBLE
                         } else {
-                            clStocks.visibility = View.VISIBLE
+                            llStocks.visibility = View.VISIBLE
                             stocksPlaceholderLayout.shimmerLayout.stopShimmer()
                             stocksPlaceholderLayout.shimmerLayout.visibility = View.GONE
                         }
@@ -112,9 +113,19 @@ class SearchActivity :
 
     private fun initUI() {
         with(binding) {
-            tilSearch.setStartIconOnClickListener { finish() }
+            tilSearch.setStartIconOnClickListener {
+                if (scvQueriesContainer.isVisible) {
+                    finish()
+                } else {
+                    scvQueriesContainer.visibility = View.VISIBLE
+                    llStocks.visibility = View.VISIBLE
+                    etSearch.setText("")
+                }
+            }
             etSearch.setOnEditorActionListener { _, actionId, event ->
-                if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) || actionId == EditorInfo.IME_ACTION_DONE) {
+                if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) ||
+                    actionId == EditorInfo.IME_ACTION_DONE
+                ) {
                     val query = etSearch.text.toString().trim()
                     searchViewModel.searchStocks(query)
                     searchViewModel.addSearchedQuery(query)
@@ -126,16 +137,16 @@ class SearchActivity :
     }
 
     private fun initRV() {
-        popularRequestsAdapter.listener = this
-        with(binding.rvPopularRequests) {
+        popularQueriesAdapter.listener = this
+        with(binding.rvPopularQueries) {
             layoutManager = StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.HORIZONTAL)
-            adapter = popularRequestsAdapter
+            adapter = popularQueriesAdapter
             setHasFixedSize(true)
         }
 
         searchedQueriesAdapter.listener = this
-        with(binding.rvSearchedRequests) {
+        with(binding.rvSearchedQueries) {
             layoutManager = StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.HORIZONTAL)
             adapter = searchedQueriesAdapter
@@ -150,12 +161,16 @@ class SearchActivity :
         }
     }
 
-    override fun onHintClick(hint: String) {
-        searchViewModel.searchStocks(hint)
+    override fun onTagClick(tag: String) {
+        searchViewModel.searchStocks(tag)
+        binding.etSearch.apply {
+            setText(tag)
+            setSelection(tag.length)
+        }
     }
 
     override fun onFavouriteClick(stock: Stock) {
         favouriteStocksViewModel.updateFavouriteStock(stock)
-        setResult(Activity.RESULT_OK)
+        setResult(Constants.RESULT_UPDATE)
     }
 }

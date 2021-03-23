@@ -13,7 +13,6 @@ class StocksLocalDataSource(
             sharedPrefs.searchRequests = value
         }
 
-    // TODO: 3/13/21 Can throw exception?
     suspend fun getFavouriteStocks(): List<Stock> {
         return stockDao.getFavouriteStocks()
     }

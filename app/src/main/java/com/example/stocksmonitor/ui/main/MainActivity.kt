@@ -1,4 +1,4 @@
-package com.example.stocksmonitor.ui
+package com.example.stocksmonitor.ui.main
 
 import android.content.Intent
 import android.os.Bundle

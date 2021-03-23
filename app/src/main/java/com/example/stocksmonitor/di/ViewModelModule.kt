@@ -9,6 +9,8 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { StocksViewModel(get() as StocksRepositoryImpl) }
+
     viewModel { FavouriteStocksViewModel(get() as StocksRepositoryImpl) }
+
     viewModel { SearchViewModel(get() as StocksRepositoryImpl) }
 }

@@ -3,7 +3,7 @@ package com.example.stocksmonitor.data.repository
 import com.example.stocksmonitor.data.local.StocksLocalDataSource
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.remote.StocksRemoteDataSource
-import com.example.stocksmonitor.utils.Constants.MAX_HINTS_COUNT
+import com.example.stocksmonitor.utils.Constants.MAX_TAGS_COUNT
 import com.example.stocksmonitor.utils.Resource
 
 class StocksRepositoryImpl(
@@ -28,10 +28,10 @@ class StocksRepositoryImpl(
         }
     }
 
-    // TODO: 3/19/21 Переписать на Resource.fromAction() ???
     override suspend fun getFavouriteStocks(): Resource<List<Stock>> {
-        val stocks = stocksLocalDataSource.getFavouriteStocks()
-        return Resource.Success(stocks)
+        return Resource.fromAction {
+            stocksLocalDataSource.getFavouriteStocks()
+        }
     }
 
     override suspend fun addFavouriteStock(stock: Stock) {
@@ -51,7 +51,7 @@ class StocksRepositoryImpl(
             val (count, tickers) = tickersResponse[0]
             when {
                 count == null || tickers.isNullOrEmpty() -> emptyList()
-                else -> tickers.take(if (count > MAX_HINTS_COUNT) MAX_HINTS_COUNT else count)
+                else -> tickers.take(if (count > MAX_TAGS_COUNT) MAX_TAGS_COUNT else count)
             }
         }
     }
@@ -70,7 +70,7 @@ class StocksRepositoryImpl(
     override suspend fun addSearchedQuery(query: String) {
         var queries = mutableSetOf<String>()
         queries.addAll(stocksLocalDataSource.searchedQueries)
-        if (queries.size >= MAX_HINTS_COUNT) {
+        if (queries.size >= MAX_TAGS_COUNT) {
             queries = mutableSetOf(queries.toMutableList().removeAt(0))
         }
         queries.add(query)

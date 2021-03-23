@@ -76,7 +76,7 @@ class FavouriteFragment : Fragment(), StockClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.REQUEST_SEARCH && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Constants.REQUEST_SEARCH && resultCode == Constants.RESULT_UPDATE) {
             favouriteStocksViewModel.getFavouriteStocks()
         }
     }

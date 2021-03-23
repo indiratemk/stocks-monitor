@@ -1,4 +1,4 @@
-package com.example.stocksmonitor.ui
+package com.example.stocksmonitor.ui.main
 
 import android.content.Intent
 import android.view.ViewGroup
@@ -47,7 +47,4 @@ class PagerAdapter(
         fragments[position] = currentFragment
         return currentFragment
     }
-
-
-
 }

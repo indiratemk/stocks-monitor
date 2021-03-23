@@ -49,67 +49,67 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ScrollView
-            android:id="@+id/svRequestsContainer"
+            android:id="@+id/scvQueriesContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
-            android:id="@+id/llRequests"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvPopularRequests"
-                style="@style/PrimaryBoldText18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/label_popular_requests" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPopularRequests"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="12dp"
-                android:visibility="gone" />
+                android:orientation="vertical">
 
-            <include
-                android:id="@+id/hintsPlaceholderLayout"
-                layout="@layout/hints_placeholder" />
+                <TextView
+                    android:id="@+id/tvPopularQueries"
+                    style="@style/PrimaryBoldText18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/label_popular_requests" />
 
-            <TextView
-                android:id="@+id/tvSearchedRequests"
-                style="@style/PrimaryBoldText18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="20dp"
-                android:text="@string/label_searched_requests"
-                android:visibility="gone" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPopularQueries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvSearchedRequests"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:clipToPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="12dp"
-                android:visibility="gone" />
-        </LinearLayout>
+                <include
+                    android:id="@+id/tagsPlaceholderLayout"
+                    layout="@layout/tags_placeholder" />
 
+                <TextView
+                    android:id="@+id/tvSearchedQueries"
+                    style="@style/PrimaryBoldText18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="@string/label_searched_requests"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSearchedQueries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="28dp"
+                    android:clipToPadding="false"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:visibility="gone" />
+            </LinearLayout>
         </ScrollView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clStocks"
+        <LinearLayout
+            android:id="@+id/llStocks"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
@@ -118,35 +118,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="@string/label_stocks"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvShowMore"
-                style="@style/PrimarySemiBoldText12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:text="@string/btn_show_more"
-                app:layout_constraintBottom_toBottomOf="@id/tvStocks"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvStocks" />
+                android:text="@string/label_stocks" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvStocks"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:clipToPadding="false"
-                android:paddingBottom="56dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvStocks" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:paddingBottom="56dp" />
+        </LinearLayout>
 
         <include
             android:id="@+id/stocksPlaceholderLayout"
