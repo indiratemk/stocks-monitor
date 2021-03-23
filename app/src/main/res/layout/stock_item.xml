@@ -28,13 +28,13 @@
             android:id="@+id/llTickerContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="12dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@id/tvCompanyName"
+            app:layout_constraintEnd_toStartOf="@id/tvCurrentPrice"
             app:layout_constraintStart_toEndOf="@id/ivLogo"
             app:layout_constraintTop_toTopOf="@id/ivLogo"
-            app:layout_constraintEnd_toStartOf="@id/tvCurrentPrice"
             app:layout_constraintVertical_chainStyle="packed">
 
             <LinearLayout
@@ -47,19 +47,20 @@
                     style="@style/PrimaryBoldText18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:layout_weight="1"
                     tools:text="YNDX" />
 
                 <CheckBox
                     android:id="@+id/chbFavourite"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:button="@drawable/favourite_chb"
-                    android:contentDescription="@string/desc_favourite" />
+                    android:button="@null"
+                    android:contentDescription="@string/desc_favourite"
+                    android:drawableStart="@drawable/favourite_chb"
+                    android:padding="8dp" />
             </LinearLayout>
         </FrameLayout>
 

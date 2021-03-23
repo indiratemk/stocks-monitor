@@ -26,6 +26,8 @@ class StocksAdapter : RecyclerView.Adapter<StockVH>() {
 
     override fun getItemCount() = stocks.count()
 
+    fun isEmpty() = itemCount == 0
+
     fun setStocks(stocks: List<Stock>) {
         this.stocks.clear()
         this.stocks.addAll(stocks)
