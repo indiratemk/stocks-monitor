@@ -46,17 +46,28 @@ class FavouriteFragment : Fragment(), StockClickListener {
         favouriteStocksViewModel.favouriteStocks.observe(viewLifecycleOwner, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> binding.refreshLayout.isRefreshing = resource.isLoading
-                is Resource.Success -> stocksAdapter.setStocks(resource.data)
+                is Resource.Success -> {
+                    stocksAdapter.setStocks(resource.data)
+                    if (stocksAdapter.isEmpty())
+                        showEmptyView()
+                    else
+                        showStocks()
+                }
                 is Resource.Error -> Toast.makeText(requireContext(), resource.message,
                         Toast.LENGTH_SHORT).show()
             }
         })
 
         favouriteStocksViewModel.stock.observe(viewLifecycleOwner, Observer { stock ->
-            if (stock.isFavourite)
+            if (stock.isFavourite) {
+                if (stocksAdapter.isEmpty())
+                    showStocks()
                 stocksAdapter.addStock(stock)
-            else
+            } else {
                 stocksAdapter.removeStock(stock)
+                if (stocksAdapter.isEmpty())
+                    showEmptyView()
+            }
         })
     }
 
@@ -72,6 +83,16 @@ class FavouriteFragment : Fragment(), StockClickListener {
             adapter = stocksAdapter
             setHasFixedSize(true)
         }
+    }
+
+    private fun showEmptyView() {
+        binding.rvStocks.visibility = View.GONE
+        binding.tvEmptyFavourites.visibility = View.VISIBLE
+    }
+
+    private fun showStocks() {
+        binding.rvStocks.visibility = View.VISIBLE
+        binding.tvEmptyFavourites.visibility = View.GONE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
