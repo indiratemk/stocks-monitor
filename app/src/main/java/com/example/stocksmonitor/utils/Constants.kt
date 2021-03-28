@@ -3,7 +3,7 @@ package com.example.stocksmonitor.utils
 object Constants {
 
     const val MBOUM_URL = "https://mboum.com/api/v1/"
-    const val MBOUM_API_KEY = "Aln23OOuedgyQVrvZY6bBdlat9BFfzbnnwvCiS4Utd8kC7OvWSlFXXjHaiHt"
+    const val MBOUM_API_KEY = "6jXiqbxOtgwpH7bKqtNBky9x3xuvNm6BbAl9RF75QPL0Z73wcWVswPn7aqyX"
     const val FINNHUB_URL = "https://finnhub.io/api/v1/"
     const val FINNHUB_API_KEY = "c0ln4cn48v6orbr1itrg"
 
