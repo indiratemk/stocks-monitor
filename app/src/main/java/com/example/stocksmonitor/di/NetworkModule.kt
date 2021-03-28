@@ -6,7 +6,6 @@ import com.example.stocksmonitor.data.remote.StocksRemoteDataSource
 import com.example.stocksmonitor.utils.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -17,16 +16,12 @@ val networkModule = module {
 
     single(named("FunnhubInterceptor")) { provideFinnhubInterceptor() }
 
-    single { provideHttpLoggingInterceptor() }
-
     single(named("MboumOkHttpClient")) {
-        provideMboumOkHttpClient(get(named("MboumInterceptor")) as Interceptor,
-            get() as HttpLoggingInterceptor)
+        provideMboumOkHttpClient(get(named("MboumInterceptor")) as Interceptor)
     }
 
     single(named("FinnhubOkHttpClient")) {
-        provideFinnhubOkHttpClient(get(named("FunnhubInterceptor")) as Interceptor,
-            get() as HttpLoggingInterceptor)
+        provideFinnhubOkHttpClient(get(named("FunnhubInterceptor")) as Interceptor)
     }
 
     single(named("MboumRetrofit")) {
@@ -76,28 +71,19 @@ fun provideFinnhubInterceptor(): Interceptor {
     }
 }
 
-fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-    return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-}
-
-
 fun provideMboumOkHttpClient(
-    requestInterceptor: Interceptor,
-    httpLoggingInterceptor: HttpLoggingInterceptor
+    requestInterceptor: Interceptor
 ): OkHttpClient {
     return OkHttpClient().newBuilder()
         .addInterceptor(requestInterceptor)
-        .addInterceptor(httpLoggingInterceptor)
         .build()
 }
 
 fun provideFinnhubOkHttpClient(
-    requestInterceptor: Interceptor,
-    httpLoggingInterceptor: HttpLoggingInterceptor
+    requestInterceptor: Interceptor
 ): OkHttpClient {
     return OkHttpClient().newBuilder()
         .addInterceptor(requestInterceptor)
-        .addInterceptor(httpLoggingInterceptor)
         .build()
 }
 
