@@ -71,7 +71,9 @@ class StocksRepositoryImpl(
         var queries = mutableSetOf<String>()
         queries.addAll(stocksLocalDataSource.searchedQueries)
         if (queries.size >= MAX_TAGS_COUNT) {
-            queries = mutableSetOf(queries.toMutableList().removeAt(0))
+            val queriesList = queries.toMutableList()
+            queriesList.removeAt(0)
+            queries = queriesList.toMutableSet()
         }
         queries.add(query)
         stocksLocalDataSource.searchedQueries = queries
