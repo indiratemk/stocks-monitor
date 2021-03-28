@@ -113,15 +113,7 @@ class SearchActivity :
 
     private fun initUI() {
         with(binding) {
-            tilSearch.setStartIconOnClickListener {
-                if (scvQueriesContainer.isVisible) {
-                    finish()
-                } else {
-                    scvQueriesContainer.visibility = View.VISIBLE
-                    llStocks.visibility = View.VISIBLE
-                    etSearch.setText("")
-                }
-            }
+            tilSearch.setStartIconOnClickListener { onBackPressed() }
             etSearch.setOnEditorActionListener { _, actionId, event ->
                 if ((event != null && event.keyCode == KeyEvent.KEYCODE_ENTER) ||
                     actionId == EditorInfo.IME_ACTION_DONE
@@ -161,6 +153,19 @@ class SearchActivity :
             layoutManager = LinearLayoutManager(this@SearchActivity)
             adapter = stocksAdapter
             setHasFixedSize(true)
+        }
+    }
+
+    override fun onBackPressed() {
+        with(binding) {
+            if (scvQueriesContainer.isVisible) {
+                finish()
+            } else {
+                searchViewModel.getSearchedQueries()
+                scvQueriesContainer.visibility = View.VISIBLE
+                llStocks.visibility = View.VISIBLE
+                etSearch.setText("")
+            }
         }
     }
 
