@@ -34,10 +34,9 @@ class StocksAdapter : RecyclerView.Adapter<StockVH>() {
         notifyDataSetChanged()
     }
 
-    fun removeStock(stock: Stock) {
-        val position = stocks.indexOfFirst { it.symbol == stock.symbol }
-        this.stocks.removeAt(position)
-        notifyDataSetChanged()
+    fun addStocks(stocks: List<Stock>) {
+        this.stocks.addAll(stocks)
+        notifyItemRangeInserted(this.stocks.size - stocks.size, stocks.size)
     }
 
     fun addStock(stock: Stock) {
@@ -52,5 +51,16 @@ class StocksAdapter : RecyclerView.Adapter<StockVH>() {
             return
         this.stocks[position] = stock
         notifyItemChanged(position)
+    }
+
+    fun removeStock(stock: Stock) {
+        val position = stocks.indexOfFirst { it.symbol == stock.symbol }
+        this.stocks.removeAt(position)
+        notifyDataSetChanged()
+    }
+
+    fun removeStocks() {
+        this.stocks.clear()
+        notifyDataSetChanged()
     }
 }

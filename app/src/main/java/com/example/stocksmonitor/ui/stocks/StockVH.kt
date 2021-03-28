@@ -8,6 +8,7 @@ import com.example.stocksmonitor.R
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.databinding.StockItemBinding
 import com.example.stocksmonitor.utils.Constants
+import java.lang.IllegalArgumentException
 import java.text.NumberFormat
 import java.util.*
 
@@ -43,34 +44,59 @@ class StockVH(
 
     private fun handlePrice(stock: Stock) {
         with(binding) {
-            val currencyFormatter = when (stock.currency) {
-                Constants.USD_CURRENCY -> NumberFormat.getCurrencyInstance(Locale.US).apply {
-                    currency = Currency.getInstance(stock.currency)
-                    maximumFractionDigits = 2
+            try {
+                val currencyFormatter = getCurrencyFormatter(stock.currency)
+                tvCurrentPrice.text = stock.regularPrice?.let {
+                    currencyFormatter.format(it)
                 }
-                null -> NumberFormat.getCurrencyInstance().apply { maximumFractionDigits = 2 }
-                else -> NumberFormat.getCurrencyInstance().apply {
-                    currency = Currency.getInstance(stock.currency)
-                    maximumFractionDigits = 2
+                val marketChange = stock.marketChange
+                val percentChange = stock.marketChangePercent
+                val formattedMarketChange = marketChange?.let {
+                    getFormattedMarketChange(currencyFormatter, it)
                 }
-            }
-            stock.regularPrice?.let { tvCurrentPrice.text = currencyFormatter.format(it) }
-            stock.marketChange?.let { marketChange ->
-                val formattedPercent = String.format("%.2f", stock.marketChangePercent)
-                val formattedMarketChange = if (marketChange > 0)
-                    itemView.context.getString(R.string.label_positive_market_change,
-                            currencyFormatter.format(stock.marketChange))
-                else
-                    currencyFormatter.format(marketChange)
-                tvDayDelta.text = itemView.context.getString(R.string.label_day_delta,
-                        formattedMarketChange, formattedPercent)
+                val formattedPercentChange = getFormattedPercent(percentChange)
+                tvDayDelta.text = marketChange?.let {
+                    itemView.context.getString(R.string.label_day_delta,
+                        formattedMarketChange, formattedPercentChange)
+                }
                 tvDayDelta.setTextColor(
-                        if (marketChange < 0)
-                            ContextCompat.getColor(itemView.context, R.color.red)
-                        else
-                            ContextCompat.getColor(itemView.context, R.color.green)
+                    if (marketChange != null && marketChange < 0)
+                        ContextCompat.getColor(itemView.context, R.color.red)
+                    else
+                        ContextCompat.getColor(itemView.context, R.color.green)
                 )
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
             }
         }
+    }
+
+    private fun getCurrencyFormatter(stockCurrency: String?): NumberFormat {
+        return when (stockCurrency) {
+            Constants.USD_CURRENCY -> NumberFormat.getCurrencyInstance(Locale.US).apply {
+                currency = Currency.getInstance(stockCurrency)
+                maximumFractionDigits = 2
+            }
+            null -> NumberFormat.getCurrencyInstance().apply { maximumFractionDigits = 2 }
+            else -> NumberFormat.getCurrencyInstance().apply {
+                currency = Currency.getInstance(stockCurrency)
+                maximumFractionDigits = 2
+            }
+        }
+    }
+
+    private fun getFormattedMarketChange(
+        currencyFormatter: NumberFormat,
+        marketChange: Float
+    ): String {
+        return if (marketChange > 0)
+            itemView.context.getString(R.string.label_positive_market_change,
+                currencyFormatter.format(marketChange))
+        else
+            currencyFormatter.format(marketChange)
+    }
+
+    private fun getFormattedPercent(percent: Float?): String {
+        return String.format("%.2f", percent)
     }
 }
