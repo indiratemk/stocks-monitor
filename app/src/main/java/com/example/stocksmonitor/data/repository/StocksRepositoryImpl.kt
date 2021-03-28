@@ -60,7 +60,7 @@ class StocksRepositoryImpl(
         return Resource.fromAction {
             val tickers = stocksRemoteDataSource.searchTickers(query).tickers
             if (tickers.isEmpty()) {
-                Resource.Error("Stocks not found")
+                throw Exception("Stocks not found")
             }
             val tickersQuery = tickers.joinToString(separator = ",") { it.symbol }
             getStocksAction(tickersQuery)

@@ -43,7 +43,7 @@ class StocksViewModel(
             val currentPageSize = getCurrentPageSize()
             val stocksTickers = Constants.S_AND_P_TICKERS
                 .slice(offset until offset + currentPageSize)
-                .joinToString(",")
+                .joinToString(separator = ",")
             val stocks = stocksRepository.getStocks(stocksTickers)
             _refreshed.value = isRefreshed
             _stocks.value = stocks

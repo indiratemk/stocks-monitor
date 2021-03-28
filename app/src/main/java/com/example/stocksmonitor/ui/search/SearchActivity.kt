@@ -127,8 +127,11 @@ class SearchActivity :
                     actionId == EditorInfo.IME_ACTION_DONE
                 ) {
                     val query = etSearch.text.toString().trim()
-                    searchViewModel.searchStocks(query)
-                    searchViewModel.addSearchedQuery(query)
+                    if (query.isNotEmpty()) {
+                        stocksAdapter.removeStocks()
+                        searchViewModel.searchStocks(query)
+                        searchViewModel.addSearchedQuery(query)
+                    }
                 }
                 true
             }
