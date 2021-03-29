@@ -24,6 +24,9 @@
         <activity
             android:name=".ui.search.SearchActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.details.StockDetailsActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="preloaded_fonts"

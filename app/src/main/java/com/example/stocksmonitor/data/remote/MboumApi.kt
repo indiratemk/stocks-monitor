@@ -1,5 +1,6 @@
 package com.example.stocksmonitor.data.remote
 
+import com.example.stocksmonitor.data.models.NewsResponse
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.models.TickersResponse
 import retrofit2.Response
@@ -13,4 +14,7 @@ interface MboumApi {
 
     @GET("tr/trending")
     suspend fun getPopularTickers(): Response<List<TickersResponse>>
+
+    @GET("ne/news")
+    suspend fun getNews(@Query("symbol") ticker: String): Response<NewsResponse>
 }

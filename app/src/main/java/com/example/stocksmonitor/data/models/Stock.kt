@@ -1,12 +1,15 @@
 package com.example.stocksmonitor.data.models
 
+import android.os.Parcelable
 import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "stocks")
+@Parcelize
 data class Stock(
 
     @PrimaryKey
@@ -36,7 +39,7 @@ data class Stock(
     val marketChangePercent: Float? = 0f,
 
     var isFavourite: Boolean = false
-) {
+) : Parcelable {
     override fun equals(other: Any?): Boolean {
         return this.symbol == (other as Stock).symbol
     }

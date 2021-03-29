@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="8dp"
+    app:cardCornerRadius="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/PrimaryBoldText16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            tools:text="Apple Rolls Out Another Update To Fix 'Actively Exploited' WebKit Vulnerability In iPhone, iPad, and Watch Devices" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            style="@style/PrimarySemiBoldText14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:maxLines="5"
+            tools:text="Apple Inc (NASDAQ: AAPL) has released yet another set of security patches aimed at addressing a WebKit vulnerability in a clutch of devices." />
+
+        <TextView
+            android:id="@+id/tvLink"
+            style="@style/PrimarySemiBoldText12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:autoLink="web"
+            android:textColor="@color/blue"
+            android:textColorLink="@color/blue"
+            tools:text="https://finance.yahoo.com/news/apple-rolls-another-fix-actively-032630462.html?.tsrc=rss" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

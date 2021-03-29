@@ -1,5 +1,6 @@
 package com.example.stocksmonitor.data.repository
 
+import com.example.stocksmonitor.data.models.News
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.utils.Resource
 
@@ -20,4 +21,6 @@ interface StocksRepository {
     suspend fun getSearchedQueries(): Resource<List<String>>
 
     suspend fun addSearchedQuery(query: String)
+
+    suspend fun getNews(ticker: String): Resource<List<News>>
 }

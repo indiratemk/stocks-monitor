@@ -1,5 +1,6 @@
 package com.example.stocksmonitor.data.remote
 
+import com.example.stocksmonitor.data.models.NewsResponse
 import com.example.stocksmonitor.data.models.TickersSearch
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.models.TickersResponse
@@ -22,5 +23,10 @@ class StocksRemoteDataSource(
     @Throws(Exception::class)
     suspend fun searchTickers(query: String): TickersSearch {
         return handleResponse { finnhubApi.searchTickers(query) }
+    }
+
+    @Throws(Exception::class)
+    suspend fun getNews(ticker: String): NewsResponse {
+        return handleResponse { mboumApi.getNews(ticker) }
     }
 }

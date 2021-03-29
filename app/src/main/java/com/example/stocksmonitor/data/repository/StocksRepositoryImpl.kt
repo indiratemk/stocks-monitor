@@ -1,6 +1,7 @@
 package com.example.stocksmonitor.data.repository
 
 import com.example.stocksmonitor.data.local.StocksLocalDataSource
+import com.example.stocksmonitor.data.models.News
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.remote.StocksRemoteDataSource
 import com.example.stocksmonitor.utils.Constants.MAX_TAGS_COUNT
@@ -83,6 +84,17 @@ class StocksRepositoryImpl(
         return Resource.fromAction {
             val queries = stocksLocalDataSource.searchedQueries
             queries.toList()
+        }
+    }
+
+    override suspend fun getNews(ticker: String): Resource<List<News>> {
+        return Resource.fromAction {
+            val newsList = stocksRemoteDataSource.getNews(ticker).items
+            if (newsList.isNullOrEmpty()) {
+                listOf()
+            } else {
+                newsList
+            }
         }
     }
 }

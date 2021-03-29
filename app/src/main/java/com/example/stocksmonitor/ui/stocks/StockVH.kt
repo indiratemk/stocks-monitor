@@ -39,6 +39,7 @@ class StockVH(
                 stock.isFavourite = !stock.isFavourite
                 listener?.onFavouriteClick(stock)
             }
+            cvStock.setOnClickListener { listener?.onStockClick(stock) }
         }
     }
 

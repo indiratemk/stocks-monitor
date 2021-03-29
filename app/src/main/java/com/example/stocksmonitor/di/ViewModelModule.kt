@@ -1,6 +1,7 @@
 package com.example.stocksmonitor.di
 
 import com.example.stocksmonitor.data.repository.StocksRepositoryImpl
+import com.example.stocksmonitor.ui.details.StockDetailsViewModel
 import com.example.stocksmonitor.ui.favourite.FavouriteStocksViewModel
 import com.example.stocksmonitor.ui.search.SearchViewModel
 import com.example.stocksmonitor.ui.stocks.StocksViewModel
@@ -13,4 +14,6 @@ val viewModelModule = module {
     viewModel { FavouriteStocksViewModel(get() as StocksRepositoryImpl) }
 
     viewModel { SearchViewModel(get() as StocksRepositoryImpl) }
+
+    viewModel { StockDetailsViewModel(get() as StocksRepositoryImpl) }
 }

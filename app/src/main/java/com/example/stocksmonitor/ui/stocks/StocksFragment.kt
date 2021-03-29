@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.databinding.StocksFragmentBinding
+import com.example.stocksmonitor.ui.details.StockDetailsActivity
 import com.example.stocksmonitor.ui.favourite.FavouriteStocksViewModel
 import com.example.stocksmonitor.utils.Constants
 import com.example.stocksmonitor.utils.Resource
@@ -44,7 +45,7 @@ class StocksFragment : Fragment(), StockClickListener {
     }
 
     private fun subscribeObservers() {
-        stocksViewModel.stocks.observe(viewLifecycleOwner, Observer { resource ->
+        stocksViewModel.stocks.observe(viewLifecycleOwner, { resource ->
             when (resource) {
                 is Resource.Loading -> binding.refreshLayout.isRefreshing = resource.isLoading
                 is Resource.Success -> stocksAdapter.addStocks(resource.data)
@@ -53,13 +54,13 @@ class StocksFragment : Fragment(), StockClickListener {
             }
         })
 
-        stocksViewModel.refreshed.observe(viewLifecycleOwner, Observer { refreshed ->
+        stocksViewModel.refreshed.observe(viewLifecycleOwner, { refreshed ->
             if (refreshed) {
                 stocksAdapter.removeStocks()
             }
         })
 
-        favouriteStocksViewModel.stock.observe(viewLifecycleOwner, Observer { stock ->
+        favouriteStocksViewModel.stock.observe(viewLifecycleOwner, { stock ->
             stocksAdapter.updateStock(stock)
         })
     }
@@ -93,6 +94,10 @@ class StocksFragment : Fragment(), StockClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.REQUEST_SEARCH && resultCode == Constants.RESULT_UPDATE) {
             stocksViewModel.getStocks(true)
+        } else if (requestCode == Constants.REQUEST_DETAILS && resultCode == Constants.RESULT_UPDATE) {
+            data?.getParcelableExtra<Stock>(Constants.EXTRA_STOCK)?.let {
+                stocksAdapter.updateStock(it)
+            }
         }
     }
 
@@ -103,5 +108,9 @@ class StocksFragment : Fragment(), StockClickListener {
 
     override fun onFavouriteClick(stock: Stock) {
         favouriteStocksViewModel.updateFavouriteStock(stock)
+    }
+
+    override fun onStockClick(stock: Stock) {
+        StockDetailsActivity.startActivityForResult(requireActivity(), stock, Constants.REQUEST_DETAILS)
     }
 }

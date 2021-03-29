@@ -55,5 +55,7 @@ object Constants {
     const val USD_CURRENCY = "USD"
     const val MAX_TAGS_COUNT = 20
     const val REQUEST_SEARCH = 701
+    const val REQUEST_DETAILS = 702
     const val RESULT_UPDATE = 501
+    const val EXTRA_STOCK = "EXTRA_STOCK"
 }

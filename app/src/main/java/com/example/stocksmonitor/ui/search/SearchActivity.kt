@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.databinding.SearchActivityBinding
+import com.example.stocksmonitor.ui.details.StockDetailsActivity
 import com.example.stocksmonitor.ui.favourite.FavouriteStocksViewModel
 import com.example.stocksmonitor.ui.search.tags.TagClickListener
 import com.example.stocksmonitor.ui.search.tags.TagsAdapter
@@ -53,7 +54,7 @@ class SearchActivity :
     }
 
     private fun subscribeObservers() {
-        searchViewModel.popularTickers.observe(this, Observer { resource ->
+        searchViewModel.popularTickers.observe(this, { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     with(binding) {
@@ -72,7 +73,7 @@ class SearchActivity :
             }
         })
 
-        searchViewModel.searchedQueries.observe(this, Observer { resource ->
+        searchViewModel.searchedQueries.observe(this, { resource ->
             when (resource) {
                 is Resource.Success -> {
                     val searchedQueries = resource.data
@@ -86,7 +87,7 @@ class SearchActivity :
             }
         })
 
-        searchViewModel.stocks.observe(this, Observer { resource ->
+        searchViewModel.stocks.observe(this, { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     with(binding) {
@@ -156,6 +157,16 @@ class SearchActivity :
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Constants.REQUEST_DETAILS && resultCode == Constants.RESULT_UPDATE) {
+            data?.getParcelableExtra<Stock>(Constants.EXTRA_STOCK)?.let {
+                stocksAdapter.updateStock(it)
+                setResult(Constants.RESULT_UPDATE)
+            }
+        }
+    }
+
     override fun onBackPressed() {
         with(binding) {
             if (scvQueriesContainer.isVisible) {
@@ -180,5 +191,9 @@ class SearchActivity :
     override fun onFavouriteClick(stock: Stock) {
         favouriteStocksViewModel.updateFavouriteStock(stock)
         setResult(Constants.RESULT_UPDATE)
+    }
+
+    override fun onStockClick(stock: Stock) {
+        StockDetailsActivity.startActivityForResult(this, stock, Constants.REQUEST_DETAILS)
     }
 }

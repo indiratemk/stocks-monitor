@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.databinding.FavouriteFragmentBinding
+import com.example.stocksmonitor.ui.details.StockDetailsActivity
 import com.example.stocksmonitor.ui.stocks.StockClickListener
 import com.example.stocksmonitor.ui.stocks.StocksAdapter
 import com.example.stocksmonitor.utils.Constants
@@ -42,7 +43,7 @@ class FavouriteFragment : Fragment(), StockClickListener {
     }
 
     private fun subscribeObservers() {
-        favouriteStocksViewModel.favouriteStocks.observe(viewLifecycleOwner, Observer { resource ->
+        favouriteStocksViewModel.favouriteStocks.observe(viewLifecycleOwner, { resource ->
             when (resource) {
                 is Resource.Loading -> binding.refreshLayout.isRefreshing = resource.isLoading
                 is Resource.Success -> {
@@ -57,15 +58,11 @@ class FavouriteFragment : Fragment(), StockClickListener {
             }
         })
 
-        favouriteStocksViewModel.stock.observe(viewLifecycleOwner, Observer { stock ->
+        favouriteStocksViewModel.stock.observe(viewLifecycleOwner, { stock ->
             if (stock.isFavourite) {
-                if (stocksAdapter.isEmpty())
-                    showStocks()
-                stocksAdapter.addStock(stock)
+                addToFavourites(stock)
             } else {
-                stocksAdapter.removeStock(stock)
-                if (stocksAdapter.isEmpty())
-                    showEmptyView()
+                removeFromFavourites(stock)
             }
         })
     }
@@ -94,10 +91,34 @@ class FavouriteFragment : Fragment(), StockClickListener {
         binding.tvEmptyFavourites.visibility = View.GONE
     }
 
+    private fun addToFavourites(stock: Stock) {
+        if (stocksAdapter.isEmpty())
+            showStocks()
+        stocksAdapter.addStock(stock)
+    }
+
+    private fun removeFromFavourites(stock: Stock) {
+        stocksAdapter.removeStock(stock)
+        if (stocksAdapter.isEmpty())
+            showEmptyView()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.REQUEST_SEARCH && resultCode == Constants.RESULT_UPDATE) {
             favouriteStocksViewModel.getFavouriteStocks()
+        } else if (requestCode == Constants.REQUEST_DETAILS && resultCode == Constants.RESULT_UPDATE) {
+            data?.getParcelableExtra<Stock>(Constants.EXTRA_STOCK)?.let {
+                if (stocksAdapter.containsStock(it)) {
+                    if (!it.isFavourite) {
+                        removeFromFavourites(it)
+                    }
+                } else {
+                    if (it.isFavourite) {
+                        addToFavourites(it)
+                    }
+                }
+            }
         }
     }
 
@@ -108,5 +129,9 @@ class FavouriteFragment : Fragment(), StockClickListener {
 
     override fun onFavouriteClick(stock: Stock) {
         favouriteStocksViewModel.updateFavouriteStock(stock)
+    }
+
+    override fun onStockClick(stock: Stock) {
+        StockDetailsActivity.startActivityForResult(requireActivity(), stock, Constants.REQUEST_DETAILS)
     }
 }

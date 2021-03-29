@@ -53,6 +53,10 @@ class StocksAdapter : RecyclerView.Adapter<StockVH>() {
         notifyItemChanged(position)
     }
 
+    fun containsStock(stock: Stock): Boolean {
+        return stocks.indexOfFirst { it.symbol == stock.symbol } != -1
+    }
+
     fun removeStock(stock: Stock) {
         val position = stocks.indexOfFirst { it.symbol == stock.symbol }
         this.stocks.removeAt(position)
