@@ -50,7 +50,7 @@ class StockDetailsActivity : AppCompatActivity() {
     }
 
     private fun subscribeObservers() {
-        stockDetailsViewModel.newsList.observe(this, { resource ->
+        stockDetailsViewModel.newsList.observe(this, Observer { resource ->
             when(resource) {
                 is Resource.Loading -> binding.refreshLayout.isRefreshing = resource.isLoading
                 is Resource.Success -> newsAdapter.setNews(resource.data)

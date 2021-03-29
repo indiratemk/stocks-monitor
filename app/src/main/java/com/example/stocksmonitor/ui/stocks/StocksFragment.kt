@@ -45,7 +45,7 @@ class StocksFragment : Fragment(), StockClickListener {
     }
 
     private fun subscribeObservers() {
-        stocksViewModel.stocks.observe(viewLifecycleOwner, { resource ->
+        stocksViewModel.stocks.observe(viewLifecycleOwner, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> binding.refreshLayout.isRefreshing = resource.isLoading
                 is Resource.Success -> stocksAdapter.addStocks(resource.data)
@@ -54,13 +54,13 @@ class StocksFragment : Fragment(), StockClickListener {
             }
         })
 
-        stocksViewModel.refreshed.observe(viewLifecycleOwner, { refreshed ->
+        stocksViewModel.refreshed.observe(viewLifecycleOwner, Observer { refreshed ->
             if (refreshed) {
                 stocksAdapter.removeStocks()
             }
         })
 
-        favouriteStocksViewModel.stock.observe(viewLifecycleOwner, { stock ->
+        favouriteStocksViewModel.stock.observe(viewLifecycleOwner, Observer { stock ->
             stocksAdapter.updateStock(stock)
         })
     }

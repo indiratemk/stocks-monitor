@@ -43,7 +43,7 @@ class FavouriteFragment : Fragment(), StockClickListener {
     }
 
     private fun subscribeObservers() {
-        favouriteStocksViewModel.favouriteStocks.observe(viewLifecycleOwner, { resource ->
+        favouriteStocksViewModel.favouriteStocks.observe(viewLifecycleOwner, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> binding.refreshLayout.isRefreshing = resource.isLoading
                 is Resource.Success -> {
@@ -58,7 +58,7 @@ class FavouriteFragment : Fragment(), StockClickListener {
             }
         })
 
-        favouriteStocksViewModel.stock.observe(viewLifecycleOwner, { stock ->
+        favouriteStocksViewModel.stock.observe(viewLifecycleOwner, Observer { stock ->
             if (stock.isFavourite) {
                 addToFavourites(stock)
             } else {

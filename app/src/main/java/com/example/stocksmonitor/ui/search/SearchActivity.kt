@@ -54,7 +54,7 @@ class SearchActivity :
     }
 
     private fun subscribeObservers() {
-        searchViewModel.popularTickers.observe(this, { resource ->
+        searchViewModel.popularTickers.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     with(binding) {
@@ -73,7 +73,7 @@ class SearchActivity :
             }
         })
 
-        searchViewModel.searchedQueries.observe(this, { resource ->
+        searchViewModel.searchedQueries.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Success -> {
                     val searchedQueries = resource.data
@@ -87,7 +87,7 @@ class SearchActivity :
             }
         })
 
-        searchViewModel.stocks.observe(this, { resource ->
+        searchViewModel.stocks.observe(this, Observer { resource ->
             when (resource) {
                 is Resource.Loading -> {
                     with(binding) {
