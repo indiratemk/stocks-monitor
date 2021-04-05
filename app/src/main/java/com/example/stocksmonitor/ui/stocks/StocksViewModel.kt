@@ -7,7 +7,9 @@ import com.example.stocksmonitor.data.repository.StocksRepository
 import com.example.stocksmonitor.ui.BaseViewModel
 import com.example.stocksmonitor.utils.Constants
 import com.example.stocksmonitor.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class StocksViewModel(
    private val stocksRepository: StocksRepository
@@ -38,13 +40,15 @@ class StocksViewModel(
             offset = 0
         }
         isLoading = true
-        coroutineContext.launch {
+        scope.launch {
             _stocks.value = Resource.Loading(isLoading)
             val currentPageSize = getCurrentPageSize()
             val stocksTickers = Constants.S_AND_P_TICKERS
                 .slice(offset until offset + currentPageSize)
                 .joinToString(separator = ",")
-            val stocks = stocksRepository.getStocks(stocksTickers)
+            val stocks = withContext(Dispatchers.IO) {
+                stocksRepository.getStocks(stocksTickers)
+            }
             _refreshed.value = isRefreshed
             _stocks.value = stocks
             offset += currentPageSize

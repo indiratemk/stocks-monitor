@@ -6,7 +6,9 @@ import com.example.stocksmonitor.data.models.News
 import com.example.stocksmonitor.data.repository.StocksRepository
 import com.example.stocksmonitor.ui.BaseViewModel
 import com.example.stocksmonitor.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class StockDetailsViewModel(
     private val stocksRepository: StocksRepository
@@ -18,9 +20,12 @@ class StockDetailsViewModel(
         get() = _newsList
 
     fun getNews(ticker: String) {
-        coroutineContext.launch {
+        scope.launch {
             _newsList.value = Resource.Loading(true)
-            _newsList.value = stocksRepository.getNews(ticker)
+            val news = withContext(Dispatchers.IO) {
+                stocksRepository.getNews(ticker)
+            }
+            _newsList.value = news
             _newsList.value = Resource.Loading(false)
         }
     }

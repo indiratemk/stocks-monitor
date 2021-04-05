@@ -54,7 +54,7 @@ class StocksAdapter : RecyclerView.Adapter<StockVH>() {
     }
 
     fun containsStock(stock: Stock): Boolean {
-        return stocks.indexOfFirst { it.symbol == stock.symbol } != -1
+        return stocks.indexOfFirst { it.symbol == stock.symbol } != NOT_CONTAIN_ITEM
     }
 
     fun removeStock(stock: Stock) {

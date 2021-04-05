@@ -6,7 +6,9 @@ import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.repository.StocksRepository
 import com.example.stocksmonitor.ui.BaseViewModel
 import com.example.stocksmonitor.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FavouriteStocksViewModel(
     private val stocksRepository: StocksRepository
@@ -21,19 +23,24 @@ class FavouriteStocksViewModel(
         get() = _stock
 
     fun getFavouriteStocks() {
-         coroutineContext.launch {
+         scope.launch {
             _favouriteStocks.value = Resource.Loading(true)
-            _favouriteStocks.value = stocksRepository.getFavouriteStocks()
+             val favouriteStocks = withContext(Dispatchers.IO) {
+                 stocksRepository.getFavouriteStocks()
+             }
+            _favouriteStocks.value = favouriteStocks
             _favouriteStocks.value = Resource.Loading(false)
         }
     }
 
     fun updateFavouriteStock(stock: Stock) {
-        coroutineContext.launch {
-            if (stock.isFavourite) {
-                stocksRepository.addFavouriteStock(stock)
-            } else {
-                stocksRepository.removeFavouriteStock(stock)
+        scope.launch {
+            withContext(Dispatchers.IO) {
+                if (stock.isFavourite) {
+                    stocksRepository.addFavouriteStock(stock)
+                } else {
+                    stocksRepository.removeFavouriteStock(stock)
+                }
             }
             _stock.value = stock
         }

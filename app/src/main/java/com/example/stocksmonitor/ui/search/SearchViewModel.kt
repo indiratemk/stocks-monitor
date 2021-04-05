@@ -6,7 +6,9 @@ import com.example.stocksmonitor.data.models.Stock
 import com.example.stocksmonitor.data.repository.StocksRepository
 import com.example.stocksmonitor.ui.BaseViewModel
 import com.example.stocksmonitor.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchViewModel(
     private val stocksRepository: StocksRepository
@@ -24,29 +26,40 @@ class SearchViewModel(
         get() = _stocks
 
     fun getPopularTickers() {
-        coroutineContext.launch {
+        scope.launch {
             _popularTickers.value = Resource.Loading(true)
-            _popularTickers.value = stocksRepository.getPopularTickers()
+            val popularTickers = withContext(Dispatchers.IO) {
+                stocksRepository.getPopularTickers()
+            }
+            _popularTickers.value = popularTickers
             _popularTickers.value = Resource.Loading(false)
         }
     }
 
     fun getSearchedQueries() {
-        coroutineContext.launch {
-            _searchedQueries.value = stocksRepository.getSearchedQueries()
+        scope.launch {
+            val searchedQueries = withContext(Dispatchers.IO) {
+                stocksRepository.getSearchedQueries()
+            }
+            _searchedQueries.value = searchedQueries
         }
     }
 
     fun addSearchedQuery(query: String) {
-        coroutineContext.launch {
-            stocksRepository.addSearchedQuery(query)
+        scope.launch {
+            withContext(Dispatchers.IO) {
+                stocksRepository.addSearchedQuery(query)
+            }
         }
     }
 
     fun searchStocks(query: String) {
-        coroutineContext.launch {
+        scope.launch {
             _stocks.value = Resource.Loading(true)
-            _stocks.value = stocksRepository.searchStocks(query)
+            val stocks = withContext(Dispatchers.IO) {
+                stocksRepository.searchStocks(query)
+            }
+            _stocks.value = stocks
             _stocks.value = Resource.Loading(false)
         }
     }
